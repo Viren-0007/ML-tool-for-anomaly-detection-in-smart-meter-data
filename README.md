@@ -137,5 +137,3 @@ Model settings (current defaults):
 ## License
 
 No license file is currently included. If you plan to publish this publicly, consider adding a `LICENSE` (e.g., MIT, Apache-2.0).
-
-
