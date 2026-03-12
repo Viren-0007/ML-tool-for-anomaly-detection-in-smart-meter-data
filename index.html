@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartMeter Anomaly Detector</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script defer src="script.js"></script>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
+  <nav class="bg-gradient-to-r from-[#1E3A8A] via-[#1E3A8A] to-[#14B8A6] shadow-lg">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex h-16 items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="h-9 w-9 rounded-xl bg-slate-900/20 flex items-center justify-center ring-2 ring-white/20">
+            <span class="text-sm font-semibold tracking-tight text-slate-50">SM</span>
+          </div>
+          <div>
+            <h1 class="text-lg sm:text-xl font-semibold tracking-tight text-slate-50">
+              SmartMeter Anomaly Detector
+            </h1>
+            <p class="hidden sm:block text-xs text-slate-100/80">
+              Detect unusual energy consumption patterns in real time
+            </p>
+          </div>
+        </div>
+        <div class="hidden sm:flex items-center gap-3 text-xs text-slate-50/90">
+          <span class="rounded-full bg-slate-900/10 px-3 py-1 border border-slate-100/20">
+            Dashboard
+          </span>
+          <span class="rounded-full bg-slate-900/10 px-3 py-1 border border-slate-100/10">
+            Anomaly Analytics
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-1 w-full">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <!-- Page Intro -->
+      <section class="space-y-2">
+        <h2 class="text-xl sm:text-2xl font-semibold tracking-tight text-slate-50">
+          Upload smart meter data and visualize anomalies
+        </h2>
+        <p class="text-sm text-slate-300 max-w-2xl">
+          Drop in a CSV export from your smart meter to see consumption trends and automatically highlighted
+          anomaly points. Optimized for both desktop and mobile dashboards.
+        </p>
+      </section>
+
+      <!-- Dashboard Grid -->
+      <section class="grid gap-6 lg:grid-cols-3">
+        <!-- Upload + Chart Card -->
+        <div class="lg:col-span-2 space-y-4">
+          <!-- Upload Card -->
+          <div
+            class="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-xl shadow-slate-900/40 backdrop-blur">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+              <div>
+                <h3 class="text-base sm:text-lg font-semibold text-slate-50 flex items-center gap-2">
+                  Upload CSV
+                  <span
+                    class="inline-flex items-center rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-medium text-emerald-300 border border-emerald-400/20">
+                    .csv only
+                  </span>
+                </h3>
+                <p class="text-xs sm:text-sm text-slate-400 mt-1">
+                  Supported format: timestamp, consumption. Larger files may take a few seconds to process.
+                </p>
+              </div>
+            </div>
+
+            <form id="upload-form" class="space-y-4 sm:space-y-0 sm:flex sm:items-end sm:gap-4">
+              <label class="w-full sm:w-auto flex-1 text-xs sm:text-sm font-medium text-slate-200 space-y-1">
+                <span>Smart meter CSV file</span>
+                <input
+                  type="file"
+                  id="csvfile"
+                  accept=".csv"
+                  class="block w-full text-xs sm:text-sm text-slate-200
+                         file:mr-4 file:py-2 file:px-4
+                         file:rounded-lg file:border-0
+                         file:text-xs sm:file:text-sm file:font-semibold
+                         file:bg-[#14B8A6] file:text-slate-900
+                         hover:file:bg-teal-400
+                         border border-slate-700/80 rounded-lg bg-slate-900/60
+                         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#14B8A6]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900
+                         transition-all duration-200"
+                />
+              </label>
+
+              <button
+                type="submit"
+                class="inline-flex items-center justify-center rounded-lg px-4 py-2.5 mt-1 sm:mt-0
+                       text-xs sm:text-sm font-semibold tracking-wide
+                       bg-[#1E3A8A] text-slate-50
+                       hover:bg-[#1E3A8A]/90 hover:shadow-[0_10px_30px_rgba(30,58,138,0.55)]
+                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#14B8A6] focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900
+                       disabled:opacity-60 disabled:cursor-not-allowed
+                       transition-all duration-200">
+                <span class="mr-2 inline-block h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(74,222,128,0.8)]"></span>
+                Detect anomalies
+              </button>
+            </form>
+          </div>
+
+          <!-- Chart Card -->
+          <div
+            class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 sm:p-5 lg:p-6 shadow-xl shadow-slate-900/40 backdrop-blur space-y-3">
+            <div class="flex items-center justify-between gap-2">
+              <div>
+                <h3 class="text-sm sm:text-base font-semibold text-slate-50">Consumption timeline</h3>
+                <p class="text-xs text-slate-400">
+                  Dark theme line chart with anomaly points highlighted in red.
+                </p>
+              </div>
+              <span
+                class="inline-flex items-center rounded-full bg-slate-900/80 px-2.5 py-0.5 text-[11px] font-medium text-slate-300 border border-slate-700/80">
+                <span class="mr-1 inline-block h-2 w-2 rounded-full bg-[#14B8A6]"></span>
+                Normal
+                <span class="mx-1 text-slate-500">|</span>
+                <span class="mr-1 inline-block h-2 w-2 rounded-full bg-red-500"></span>
+                Anomaly
+              </span>
+            </div>
+
+            <div class="mt-2 relative h-64 sm:h-72 md:h-80 lg:h-[22rem]">
+              <canvas id="chart" class="w-full h-full"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Anomaly Results Card -->
+        <div
+          id="anomaly-section"
+          class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-xl shadow-slate-900/40 backdrop-blur flex flex-col">
+          <div class="mb-3 sm:mb-4">
+            <h3 class="text-sm sm:text-base font-semibold text-slate-50 flex items-center gap-2">
+              Anomaly details
+              <span class="inline-flex items-center rounded-full bg-red-500/10 px-2 py-0.5 text-[10px] font-medium text-red-300 border border-red-500/30">
+                High impact
+              </span>
+            </h3>
+            <p class="text-xs text-slate-400 mt-1">
+              Each anomaly point represents an outlier in your historical consumption profile.
+            </p>
+          </div>
+
+          <div class="flex-1 overflow-hidden rounded-xl border border-slate-800/80 bg-slate-950/60">
+            <div class="max-h-80 overflow-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-slate-900/40">
+              <table id="anomaly-table" class="min-w-full text-xs sm:text-sm text-left">
+                <!-- Content populated by script.js -->
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800 bg-slate-950/95">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs sm:text-sm text-slate-400">
+      <p>
+        &copy; <span id="year-span"></span> SmartMeter Anomaly Detector. Built for energy analytics.
+      </p>
+      <p class="text-[11px] sm:text-xs text-slate-500">
+        Dashboard UI crafted with <span class="text-[#14B8A6] font-semibold">TailwindCSS</span> · Project by
+        <span class="text-slate-200 font-medium">Viren</span>
+      </p>
+    </div>
+  </footer>
+</body>
+</html>
